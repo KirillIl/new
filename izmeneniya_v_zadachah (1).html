@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Изменения в работе с задачами</title>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --card: #ffffff;
+    --text: #2c2c2a;
+    --text-secondary: #5f5e5a;
+    --border: #e3e1d9;
+    --purple: #7F77DD; --purple-bg: #EEEDFE; --purple-text: #3C3489;
+    --teal: #1D9E75; --teal-bg: #E1F5EE; --teal-text: #085041;
+    --coral: #D85A30; --coral-bg: #FAECE7; --coral-text: #712B13;
+    --amber-bg: #FAEEDA; --amber-text: #633806; --amber-border: #EF9F27;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px 60px;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 660px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+  .intro {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+  }
+  .intro h1 { font-size: 19px; font-weight: 600; margin: 0 0 6px; }
+  .intro p { font-size: 14px; color: var(--text-secondary); margin: 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .card.teal { border-left-color: var(--teal); }
+  .card.coral { border-left-color: var(--coral); }
+  .card.mixed { border-left-color: var(--amber-border); }
+  .card h2 { font-size: 15px; font-weight: 600; margin: 0; }
+  .card .sub { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; font-style: italic; }
+  .q {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    margin: 14px 0 8px;
+  }
+  .steps { display: flex; flex-direction: column; }
+  .step { display: flex; gap: 10px; }
+  .step:not(:last-child) { padding-bottom: 12px; }
+  .step .dot {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; flex-shrink: 0;
+  }
+  .card .dot { background: var(--purple-bg); color: var(--purple-text); }
+  .card.teal .dot { background: var(--teal-bg); color: var(--teal-text); }
+  .card.coral .dot { background: var(--coral-bg); color: var(--coral-text); }
+  .card.mixed .dot { background: var(--amber-bg); color: var(--amber-text); }
+  .step .rail { display: flex; flex-direction: column; align-items: center; }
+  .step .rail .line { width: 1px; flex: 1; background: var(--border); margin-top: 2px; }
+  .step .text { font-size: 13.5px; padding-top: 2px; }
+  .subgroup {
+    margin-top: 6px;
+    padding: 12px 14px;
+    background: #FAFAF7;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+  .subgroup + .subgroup { margin-top: 10px; }
+  .subgroup .label {
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .subgroup .label.regions { color: var(--text-secondary); }
+  .subgroup .label.ufa { color: var(--amber-text); }
+  .callout {
+    margin-top: 14px;
+    background: var(--amber-bg);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 12.5px;
+    color: var(--amber-text);
+  }
+  .callout a { color: var(--amber-text); }
+  .footer {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    padding: 10px 0 0;
+  }
+  b { font-weight: 600; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --card: #242422; --text: #ece9e0; --text-secondary: #a3a196; --border: #383632;
+      --purple-bg: #2a2860; --purple-text: #cec8f6;
+      --teal-bg: #0c3a30; --teal-text: #9fe1cb;
+      --coral-bg: #4a2414; --coral-text: #f0997b;
+      --amber-bg: #3a2a0c; --amber-text: #fac775;
+    }
+    .subgroup { background: #201f1c; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="intro">
+    <h1>Ребята, всем привет 👋</h1>
+    <p>С завтрашнего дня меняется порядок работы с задачами. Просьба ознакомиться и поставить реакцию ✅, что прочитали.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="card">
+    <h2>Фиксация: запрос документов у агента</h2>
+    <div class="sub">Данные в заявке либо не хватает, либо не корректные. Не хватает документов</div>
+    <div class="q">Если не получаем ответ от агента — на какой срок двигаем задачу?</div>
+    <div class="steps">
+      <div class="step">
+        <div class="rail"><span class="dot">1</span><span class="line"></span></div>
+        <div class="text">Сразу после фиксации совершаем звонок. Если не ответил — пишем запрос в чат и ставим задачу через <b>24 часа</b></div>
+      </div>
+      <div class="step">
+        <div class="rail"><span class="dot">2</span></div>
+        <div class="text">Звоним. Если не ответил — пишем с запросом информации и <b>закрываем задачу</b>. Дальше отталкиваемся от задачи «Ответить в чате»</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card mixed">
+    <h2>Фиксация: проверка статуса у застройщика</h2>
+    <h2 style="margin-top:2px">Бронирование: подтверждение от застройщика</h2>
+    <div class="q">Если не получаем ответ от агента — на какой срок двигаем задачу?</div>
+
+    <div class="subgroup">
+      <div class="label regions">🌍 Регионы РНД, ВРН, ЕКБ, МСК, КЗН</div>
+      <div style="font-size:13.5px">Таймер <b>+1 час</b>. Если ответа нет — переносим на следующий день</div>
+    </div>
+
+    <div class="subgroup">
+      <div class="label ufa">📍 Уфа — особый порядок</div>
+      <div class="steps">
+        <div class="step">
+          <div class="rail"><span class="dot">1</span><span class="line"></span></div>
+          <div class="text">Таймер <b>+1 час</b>. Если ответа нет — тегаем ответственного менеджера ЗС в мессенджере (контакт — столбец Е в <a href="https://nc.k.avito.ru/s/MfzEeSWmAibcbdL?openfile=true" target="_blank">файле застройщиков</a>)</div>
+        </div>
+        <div class="step">
+          <span class="dot">2</span>
+          <div class="text">Если ответа от ответственного всё ещё нет — используем «касание 2» из файла (звонок или тег в чате), таймер <b>+1 день</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card teal">
+    <h2>Бронирование: запрос документов у агента</h2>
+    <div class="sub">Данные в заявке либо не хватает, либо не корректные. Не хватает документов</div>
+    <div class="q">Если не получаем ответ от агента — на какой срок двигаем задачу?</div>
+    <div class="steps">
+      <div class="step">
+        <div class="rail"><span class="dot">1</span><span class="line"></span></div>
+        <div class="text">Сразу после бронирования совершаем звонок. Если не ответил — пишем запрос в чат и ставим задачу через <b>24 часа</b></div>
+      </div>
+      <div class="step">
+        <div class="rail"><span class="dot">2</span><span class="line"></span></div>
+        <div class="text">Звоним. Если не ответил — пишем с запросом информации и переносим задачу на <b>+7 дней</b></div>
+      </div>
+      <div class="step">
+        <span class="dot">3</span>
+        <div class="text">Через 7 дней ответа всё ещё нет — пушим агента и двигаем задачу на <b>месяц</b>. По окончании месяца — закрытие задачи</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card coral">
+    <h2>Сделка: уточнение статуса у агента</h2>
+    <div class="sub">Уточнение у агента в чате по дате</div>
+    <div class="q">Если не получаем ответ от агента — на какой срок двигаем задачу?</div>
+    <div style="font-size:13.5px;margin-bottom:10px">После подтверждения бронирования ставим тайминг в задаче <b>+7 дней</b> (если срок брони короче — ставим на дату окончания брони)</div>
+    <div class="steps">
+      <div class="step">
+        <div class="rail"><span class="dot">1</span><span class="line"></span></div>
+        <div class="text">Если ответа нет — на 7-й день пишем в чат агенту, тайминг в задаче проставляем на актуальную дату сделки</div>
+      </div>
+      <div class="step">
+        <span class="dot">2</span>
+        <div class="text">Если ответа нет — тайминг в задаче выставляем через месяц</div>
+      </div>
+    </div>
+    <div class="callout">
+      📍 <span><b>ВАЖНО!</b> Если получили ответ на любом из касаний — актуализируем срок задачи (ставим дату сделки <b>+1 день</b>)</span>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card coral">
+    <h2>Сделка: запрос документов для выплаты КВ</h2>
+    <div class="sub">Данные в заявке либо не хватает, либо не корректные. Не хватает документов. Срок выставляем 3 дня</div>
+    <div class="q">Если не получаем ответ от агента — на какой срок двигаем задачу?</div>
+    <div class="steps">
+      <div class="step">
+        <div class="rail"><span class="dot">1</span><span class="line"></span></div>
+        <div class="text">Ответ так и не поступил — пишем в чат, продлеваем задачу на <b>7 дней</b></div>
+      </div>
+      <div class="step">
+        <span class="dot">2</span>
+        <div class="text">Ответа агента нет — пишем в чат, тайминг в задаче <b>+1 месяц</b></div>
+      </div>
+    </div>
+    <div class="callout">
+      📍 <span><b>ВАЖНО!</b> В чате обязательно запрашиваем у агента сроки предоставления!</span>
+    </div>
+  </div>
+
+  <div class="footer">Просьба всем ознакомиться и поставить реакцию ✅. Вопросы — в тред 👇</div>
+
+</div>
+</body>
+</html>
